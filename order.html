@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Now | Absolute Notary</title>
+    <style>
+        :root {
+            --gold: #caa24a;
+            --gold-dark: #a8822e;
+            --brown: #3c2415;
+            --cream: #f8f3ea;
+            --tan: #efe4d0;
+            --text: #2d2118;
+            --white: #ffffff;
+            --border: #ddcfb7;
+            --shadow: 0 10px 28px rgba(60, 36, 21, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: var(--text);
+            background: var(--cream);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .topbar {
+            background: var(--brown);
+            color: var(--white);
+            font-size: 14px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.96);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(60, 36, 21, 0.08);
+        }
+
+        .navbar .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 14px 0;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--brown);
+            letter-spacing: 0.5px;
+        }
+
+        .logo span {
+            color: var(--gold-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--brown);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--gold-dark);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--gold);
+            color: var(--brown);
+            background: transparent;
+        }
+
+        .hero-small {
+            background: linear-gradient(to right, rgba(248,243,234,0.95), rgba(248,243,234,0.75)),
+                url("./Heading.png") center top / cover no-repeat;
+            padding: 72px 0 54px;
+        }
+
+        .hero-small h1 {
+            margin: 0 0 12px;
+            font-size: 48px;
+            line-height: 1.08;
+            color: var(--brown);
+        }
+
+        .hero-small p {
+            margin: 0;
+            font-size: 18px;
+            max-width: 760px;
+        }
+
+        .section {
+            padding: 60px 0 80px;
+        }
+
+        .order-layout {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 28px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 22px;
+        }
+
+        .panel h2 {
+            margin: 0 0 18px;
+            font-size: 28px;
+            color: var(--brown);
+        }
+
+        .panel h3 {
+            margin: 0 0 12px;
+            font-size: 21px;
+            color: var(--brown);
+        }
+
+        .muted {
+            color: #5a4a3f;
+            font-size: 15px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--brown);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 14px;
+            font: inherit;
+            color: var(--text);
+            background: #fffdf9;
+        }
+
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        .service-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 16px;
+            background: #fffdf9;
+        }
+
+        .service-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: start;
+            margin-bottom: 14px;
+        }
+
+        .service-top h4 {
+            margin: 0 0 6px;
+            font-size: 19px;
+            color: var(--brown);
+        }
+
+        .price {
+            font-weight: 700;
+            color: var(--gold-dark);
+            white-space: nowrap;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 14px;
+            align-items: end;
+        }
+
+        .checkbox-row,
+        .radio-row {
+            display: grid;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .check-option,
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fffdf9;
+        }
+
+        .check-option input,
+        .radio-option input {
+            width: auto;
+            margin-top: 4px;
+        }
+
+        .summary-card {
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-list {
+            display: grid;
+            gap: 12px;
+            margin: 18px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 15px;
+        }
+
+        .summary-row.total {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--brown);
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+            margin-top: 4px;
+        }
+
+        .note-box {
+            background: var(--tan);
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 14px;
+            color: #4d3a2c;
+            margin-top: 18px;
+        }
+
+        .terms {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+
+        .terms input {
+            width: auto;
+            margin-top: 4px;
+        }
+
+        .footer-space {
+            margin-top: 18px;
+        }
+
+        footer {
+            background: #2a180f;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 24px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        @media (max-width: 980px) {
+            .order-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-card {
+                position: static;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-small {
+                padding: 54px 0 40px;
+            }
+
+            .hero-small h1 {
+                font-size: 36px;
+            }
+
+            .form-grid,
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 22px 18px;
+            }
+
+            .topbar .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="container">
+            <div>Professional Notary & Loan Signing Services</div>
+            <div>Call Now: (408) 890-6850</div>
+        </div>
+    </div>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Absolute <span>Notary</span></a>
+            <nav class="nav-links">
+                <a href="index.html#services">Services</a>
+                <a href="index.html#why-us">Why Choose Us</a>
+                <a href="index.html#contact">Contact</a>
+                <a href="order-now.html" class="btn btn-primary">Order Now</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-small">
+        <div class="container">
+            <h1>Notary, Apostille, Live Scan & Loan Signing</h1>
+            <p>
+                Choose a service below, enter a few details, and continue to the matching payment or scheduling option.
+            </p>
+        </div>
+    </section>
+
+    <section class="section" id="pricing-notes">
+        <div class="container">
+            <div class="panel">
+                <h2>Pricing Notes</h2>
+                <p class="muted">Clear pricing so customers know what to expect before they proceed to payment.</p>
+
+                <div style="margin-top:18px; display:grid; gap:12px;">
+                    <div style="padding:14px; border-radius:12px; background:#fffdf9; border:1px solid var(--border);">
+                        <strong>General Notary</strong>
+                        <div class="muted">$15 for the first signature, $10 for each additional signature.</div>
+                    </div>
+
+                    <div style="padding:14px; border-radius:12px; background:#fffdf9; border:1px solid var(--border);">
+                        <strong>Apostille</strong>
+                        <div class="muted">Turnaround options: $99 (4 weeks), $115 (within 2 weeks), $200 (1–2 days).</div>
+                    </div>
+
+                    <div style="padding:14px; border-radius:12px; background:#fffdf9; border:1px solid var(--border);">
+                        <strong>Loan Signing</strong>
+                        <div class="muted">Starts at $125 and can range up to $250 depending on package size.</div>
+                    </div>
+
+                    <div style="padding:14px; border-radius:12px; background:#fffdf9; border:1px solid var(--border);">
+                        <strong>Live Scan</strong>
+                        <div class="muted">Fingerprinting appointments — contact for rate or complete payment at checkout.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="order-layout">
+                <div>
+                    <form>
+                        <div class="panel">
+                            <h2>Your Information</h2>
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label for="first-name">First Name</label>
+                                    <input id="first-name" type="text" placeholder="First name" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="last-name">Last Name</label>
+                                    <input id="last-name" type="text" placeholder="Last name" />
+                                </div>
+
+                                <div class="field full">
+                                    <label for="email">Email</label>
+                                    <input id="email" type="email" placeholder="Email address" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="phone">Phone</label>
+                                    <input id="phone" type="tel" placeholder="Phone number" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="service-area">Service Area</label>
+                                    <input id="service-area" type="text" placeholder="City, State" />
+                                </div>
+
+                                <div class="field full">
+                                    <label for="address">Address</label>
+                                    <input id="address" type="text" placeholder="Street address" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <h2>Select Your Services</h2>
+                            <p class="muted">Choose a service below. For notary work, our pricing is per signature; the form will collect counts before payment.</p>
+
+                            <div class="service-card">
+                                <div class="service-top">
+                                    <div>
+                                        <h4>General Notary Services</h4>
+                                        <div class="muted">Per-signature pricing</div>
+                                    </div>
+                                    <div class="price">$15 first / $10 additional</div>
+                                </div>
+                                <div class="service-grid">
+                                    <div class="field">
+                                        <label for="notary-type">Choose service type</label>
+                                        <select id="notary-type">
+                                            <option>Acknowledgment</option>
+                                            <option>Jurat</option>
+                                            <option>Copy Certification</option>
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label for="notary-signatures">Number of signatures</label>
+                                        <input id="notary-signatures" type="number" min="1" value="1" />
+                                    </div>
+                                </div>
+                                <div style="margin-top:10px;" class="muted">Provide travel location and preferred appointment time below before continuing to payment.</div>
+                                <div style="margin-top:12px;" class="field">
+                                    <label>Details needed</label>
+                                    <div class="muted">Travel location, preferred appointment time</div>
+                                </div>
+                                <a href="https://square.link/u/GtnRdoFL" class="btn btn-primary" style="display:block; margin-top:12px; text-align:center;">Pay for Notary Service</a>
+                            </div>
+
+                            <div class="service-card">
+                                <div class="service-top">
+                                    <div>
+                                        <h4>Jurat</h4>
+                                        <div class="muted">Per-signature pricing</div>
+                                    </div>
+                                    <div class="price">$15 first / $10 additional</div>
+                                </div>
+                                <div class="service-grid">
+                                    <div class="field">
+                                        <label for="jurat-count">Number of jurat signatures</label>
+                                        <input id="jurat-count" type="number" min="1" value="1" />
+                                    </div>
+                                    <div class="field">
+                                        <label for="jurat-doc-type">Document type</label>
+                                        <input id="jurat-doc-type" type="text" placeholder="Document type" />
+                                    </div>
+                                </div>
+                                <div style="margin-top:12px;" class="field">
+                                    <label for="jurat-location">Travel location</label>
+                                    <input id="jurat-location" type="text" placeholder="City, State" />
+                                </div>
+                                <a href="https://square.link/u/FWTeh6PP" class="btn btn-primary" style="display:block; margin-top:12px; text-align:center;">Pay for Jurat</a>
+                            </div>
+
+                            <div class="service-card">
+                                <div class="service-top">
+                                    <div>
+                                        <h4>Apostille Service</h4>
+                                        <div class="muted">Turnaround-based pricing</div>
+                                    </div>
+                                    <div class="price">$99 / $115 / $200</div>
+                                </div>
+                                <div class="service-grid">
+                                    <div class="field">
+                                        <label for="apostille-doc-type">Document type</label>
+                                        <input id="apostille-doc-type" type="text" placeholder="Document type" />
+                                    </div>
+                                    <div class="field">
+                                        <label for="apostille-qty">Number of documents</label>
+                                        <input id="apostille-qty" type="number" min="1" value="1" />
+                                    </div>
+                                </div>
+                                <div class="field" style="margin-top:10px;">
+                                    <label for="apostille-turnaround">Select turnaround time</label>
+                                    <select id="apostille-turnaround">
+                                        <option value="99">4 weeks — $99</option>
+                                        <option value="115">Within 2 weeks — $115</option>
+                                        <option value="200">1–2 days — $200</option>
+                                    </select>
+                                </div>
+                                <a href="https://square.link/u/TBkflP8a" class="btn btn-primary" style="display:block; margin-top:12px; text-align:center;">Pay for Apostille</a>
+                            </div>
+
+                            <div class="service-card">
+                                <div class="service-top">
+                                    <div>
+                                        <h4>Loan Signing</h4>
+                                        <div class="muted">Package-size pricing</div>
+                                    </div>
+                                    <div class="price">$125–$250</div>
+                                </div>
+                                <div class="service-grid">
+                                    <div class="field">
+                                        <label for="loan-type">Loan type / package details</label>
+                                        <input id="loan-type" type="text" placeholder="Loan type or package details" />
+                                    </div>
+                                    <div class="field">
+                                        <label for="loan-address">Property address</label>
+                                        <input id="loan-address" type="text" placeholder="Property address" />
+                                    </div>
+                                </div>
+                                <div class="field" style="margin-top:10px;">
+                                    <label for="loan-time">Preferred signing time</label>
+                                    <input id="loan-time" type="text" placeholder="Preferred signing time" />
+                                </div>
+                                <div class="field" style="margin-top:10px;">
+                                    <label for="loan-contact">Borrower contact details</label>
+                                    <input id="loan-contact" type="text" placeholder="Phone or email" />
+                                </div>
+                                <a href="#contact" class="btn btn-outline" style="display:block; margin-top:12px; text-align:center;">Request Loan Signing</a>
+                            </div>
+
+                            <div class="service-card">
+                                <div class="service-top">
+                                    <div>
+                                        <h4>Live Scan</h4>
+                                        <div class="muted">Appointment checkout</div>
+                                    </div>
+                                    <div class="price">Contact for rate</div>
+                                </div>
+                                <div class="service-grid">
+                                    <div class="field">
+                                        <label for="livescan-type">Type of Live Scan</label>
+                                        <input id="livescan-type" type="text" placeholder="Type of Live Scan" />
+                                    </div>
+                                    <div class="field">
+                                        <label for="livescan-ori">Agency or ORI</label>
+                                        <input id="livescan-ori" type="text" placeholder="Agency or ORI" />
+                                    </div>
+                                </div>
+                                <div class="field" style="margin-top:10px;">
+                                    <label for="livescan-time">Preferred appointment time</label>
+                                    <input id="livescan-time" type="text" placeholder="Preferred appointment time" />
+                                </div>
+                                <a href="https://square.link/u/NYmBmv8o" class="btn btn-primary" style="display:block; margin-top:12px; text-align:center;">Pay for Live Scan</a>
+                            </div>
+
+                            <div class="field">
+                                <label for="document-description">Additional details</label>
+                                <textarea id="document-description" placeholder="Describe documents or any special instructions."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <h2>Document Handling & Delivery</h2>
+
+                            <h3>How will you send your documents?</h3>
+                            <div class="radio-row">
+                                <label class="radio-option">
+                                    <input type="radio" name="send-method" checked />
+                                    <span>I will deliver or send my documents myself</span>
+                                </label>
+
+                                <label class="radio-option">
+                                    <input type="radio" name="send-method" />
+                                    <span>Please send me a prepaid shipping label</span>
+                                </label>
+
+                                <label class="radio-option">
+                                    <input type="radio" name="send-method" />
+                                    <span>I need local pickup service</span>
+                                </label>
+                            </div>
+
+                            <h3 style="margin-top:24px;">Return Delivery</h3>
+                            <div class="radio-row">
+                                <label class="radio-option">
+                                    <input type="radio" name="return-method" checked />
+                                    <span>Standard return delivery</span>
+                                </label>
+
+                                <label class="radio-option">
+                                    <input type="radio" name="return-method" />
+                                    <span>Expedited / overnight return delivery</span>
+                                </label>
+
+                                <label class="radio-option">
+                                    <input type="radio" name="return-method" />
+                                    <span>I will provide my own return label</span>
+                                </label>
+                            </div>
+
+                            <div class="checkbox-row" style="margin-top:24px;">
+                                <label class="check-option">
+                                    <input type="checkbox" />
+                                    <span>Require signature on delivery</span>
+                                </label>
+
+                                <label class="check-option">
+                                    <input type="checkbox" />
+                                    <span>Add flatbed scans of completed documents</span>
+                                </label>
+                            </div>
+
+                            <div class="form-grid" style="margin-top:18px;">
+                                <div class="field full">
+                                    <label for="return-address">Return Address</label>
+                                    <input id="return-address" type="text" placeholder="Where should completed documents be sent?" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="return-contact">Return Contact Name</label>
+                                    <input id="return-contact" type="text" placeholder="Contact person" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="return-phone">Return Contact Phone</label>
+                                    <input id="return-phone" type="tel" placeholder="Phone number" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <h2>Additional Details</h2>
+                            <div class="form-grid">
+                                <div class="field">
+                                    <label for="deadline">Requested Deadline</label>
+                                    <input id="deadline" type="date" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="preferred-contact">Preferred Contact Method</label>
+                                    <select id="preferred-contact">
+                                        <option>Email</option>
+                                        <option>Phone</option>
+                                        <option>Text Message</option>
+                                    </select>
+                                </div>
+
+                                <div class="field full">
+                                    <label for="special-instructions">Special Instructions</label>
+                                    <textarea id="special-instructions" placeholder="Add anything we should know about your request."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <h2>Payment & Terms</h2>
+                            <p class="muted">
+                                This version is the front-end layout only. You can connect Stripe, Square, or another payment processor later.
+                            </p>
+
+                            <div class="form-grid">
+                                <div class="field full">
+                                    <label for="card-name">Cardholder Name</label>
+                                    <input id="card-name" type="text" placeholder="Name on card" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="card-number">Card Number</label>
+                                    <input id="card-number" type="text" placeholder="1234 5678 9012 3456" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="card-exp">Expiration</label>
+                                    <input id="card-exp" type="text" placeholder="MM/YY" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="card-cvc">CVC</label>
+                                    <input id="card-cvc" type="text" placeholder="CVC" />
+                                </div>
+
+                                <div class="field">
+                                    <label for="billing-zip">Billing ZIP</label>
+                                    <input id="billing-zip" type="text" placeholder="ZIP code" />
+                                </div>
+                            </div>
+
+                            <label class="terms">
+                                <input type="checkbox" />
+                                <span>I have reviewed my information and agree to the terms and conditions.</span>
+                            </label>
+
+                            <button type="submit" class="btn btn-primary">Submit Order Request</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div>
+                    <div class="panel summary-card">
+                        <h2>Order Summary</h2>
+                        <p class="muted">Estimates update based on signature counts and selected options. Use the checkout links on each service card to complete payment.</p>
+
+                        <div class="summary-list">
+                            <div class="summary-row">
+                                <span>Notary (estimated)</span>
+                                <span id="summary-notary-amount">$15.00</span>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Jurat (estimated)</span>
+                                <span id="summary-jurat-amount">$0.00</span>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Apostille (selected)</span>
+                                <span id="summary-apostille-amount">$0.00</span>
+                            </div>
+
+                            <div class="summary-row total">
+                                <span>Estimated Total</span>
+                                <span id="estimated-total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="note-box">
+                            Notary pricing is based on signature count: first signature $15, additional $10 each. Loan signing pricing varies by package.
+                        </div>
+
+                        <div class="footer-space">
+                            <a href="index.html#contact" class="btn btn-outline">Need Help First?</a>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Why Order With Absolute Notary?</h3>
+                        <div class="checkbox-row">
+                            <div class="check-option">
+                                <span>Professional, detail-focused service</span>
+                            </div>
+                            <div class="check-option">
+                                <span>Convenient mobile appointments</span>
+                            </div>
+                            <div class="check-option">
+                                <span>Responsive communication</span>
+                            </div>
+                            <div class="check-option">
+                                <span>Clear process from start to finish</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Recommended Notary Flow</h3>
+                        <p class="muted">Notary pricing is calculated by signature count. Follow these steps before payment.</p>
+
+                        <div style="display:grid; gap:10px; margin-top:12px;">
+                            <div style="padding:12px; border-radius:10px; background:#fffdf9; border:1px solid var(--border);">
+                                <strong>Step 1:</strong> Choose service type — Acknowledgment, Jurat, or Copy Certification.
+                            </div>
+                            <div style="padding:12px; border-radius:10px; background:#fffdf9; border:1px solid var(--border);">
+                                <strong>Step 2:</strong> Enter the number of signatures. First signature is $15; each additional is $10.
+                            </div>
+                            <div style="padding:12px; border-radius:10px; background:#fffdf9; border:1px solid var(--border);">
+                                <strong>Step 3:</strong> Add travel details — address, urgency, and mobile appointment notes.
+                            </div>
+                            <div style="padding:12px; border-radius:10px; background:#fffdf9; border:1px solid var(--border);">
+                                <strong>Step 4:</strong> Continue to the matching payment option — use Notary or Jurat checkout links.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Have Questions?</h3>
+                        <p class="muted">
+                            Call, email, or use your contact section if a customer needs help before placing an order.
+                        </p>
+                        <p><strong>Phone:</strong> (408) 890-6850</p>
+                        <p><strong>Email:</strong> info@absolutenotary.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            © 2026 Absolute Notary. All rights reserved.
+        </div>
+    </footer>
+    <script>
+        (function(){
+            function formatMoney(n){
+                return '$' + n.toFixed(2);
+            }
+
+            function updateSummary(){
+                var notarySignatures = parseInt(document.getElementById('notary-signatures')?.value || 0, 10) || 0;
+                var juratCount = parseInt(document.getElementById('jurat-count')?.value || 0, 10) || 0;
+                var apostilleQty = parseInt(document.getElementById('apostille-qty')?.value || 0, 10) || 0;
+                var apostilleTurn = parseInt(document.getElementById('apostille-turnaround')?.value || 0, 10) || 0;
+
+                var notaryTotal = 0;
+                if(notarySignatures > 0){
+                    notaryTotal = 15 + Math.max(0, notarySignatures - 1) * 10;
+                }
+
+                var juratTotal = 0;
+                if(juratCount > 0){
+                    juratTotal = 15 + Math.max(0, juratCount - 1) * 10;
+                }
+
+                var apostilleTotal = 0;
+                if(apostilleQty > 0 && apostilleTurn > 0){
+                    apostilleTotal = apostilleQty * apostilleTurn;
+                }
+
+                var total = notaryTotal + juratTotal + apostilleTotal;
+
+                var notaryEl = document.getElementById('summary-notary-amount');
+                var juratEl = document.getElementById('summary-jurat-amount');
+                var apostilleEl = document.getElementById('summary-apostille-amount');
+                var totalEl = document.getElementById('estimated-total');
+
+                if(notaryEl) notaryEl.textContent = formatMoney(notaryTotal);
+                if(juratEl) juratEl.textContent = juratTotal > 0 ? formatMoney(juratTotal) : '$0.00';
+                if(apostilleEl) apostilleEl.textContent = apostilleTotal > 0 ? formatMoney(apostilleTotal) : '$0.00';
+                if(totalEl) totalEl.textContent = formatMoney(total);
+            }
+
+            document.addEventListener('DOMContentLoaded', function(){
+                ['notary-signatures','jurat-count','apostille-qty','apostille-turnaround'].forEach(function(id){
+                    var el = document.getElementById(id);
+                    if(el) el.addEventListener('input', updateSummary);
+                });
+                updateSummary();
+            });
+        })();
+    </script>
+</body>
+</html>
