@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Absolute Notary</title>
+  <style>
+    :root {
+      --gold: #caa24a;
+      --gold-dark: #a8822e;
+      --brown: #3c2415;
+      --cream: #f8f3ea;
+      --tan: #efe4d0;
+      --text: #2d2118;
+      --white: #ffffff;
+      --shadow: 0 10px 28px rgba(60, 36, 21, 0.08);
+      --border: rgba(60, 36, 21, 0.1);
+      --yelp-red: #d32323;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      line-height: 1.6;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      background: var(--brown);
+      color: var(--white);
+      font-size: 14px;
+    }
+
+    .topbar .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0;
+      flex-wrap: wrap;
+    }
+
+    .navbar {
+      background: rgba(255, 255, 255, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(60, 36, 21, 0.08);
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 104px;
+      padding: 14px 0;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      align-self: center;
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      display: block;
+      width: auto;
+      height: 74px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--brown);
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: relative;
+    }
+
+    .mobile-menu summary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid rgba(60, 36, 21, 0.12);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--brown);
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .mobile-menu summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-menu-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      display: grid;
+      gap: 8px;
+      min-width: 220px;
+      padding: 12px;
+      border: 1px solid rgba(60, 36, 21, 0.12);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 14px 30px rgba(60, 36, 21, 0.12);
+    }
+
+    .mobile-menu-link {
+      color: var(--brown);
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .mobile-menu-panel .btn {
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-dark);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--gold);
+      color: var(--brown);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--tan);
+    }
+
+    .hero {
+      min-height: 690px;
+      /* The visible logo in this area is embedded in Heading.jpg, not separate HTML. */
+      background-image: url("./Heading.jpg");
+      background-size: cover;
+      background-position: top center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: flex-start;
+      padding: 18px 0 20px;
+    }
+
+    .hero .container {
+      width: min(1120px, calc(100% - 32px));
+    }
+
+    .hero-content {
+      max-width: 700px;
+      margin-left: 16px;
+      margin-top: 18px;
+      background: rgba(248, 243, 234, 0.88);
+      backdrop-filter: blur(2px);
+      border-radius: 24px;
+      padding: 28px 32px 32px;
+      box-shadow: 0 20px 45px rgba(60, 36, 21, 0.12);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: rgba(202, 162, 74, 0.18);
+      color: var(--brown);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 54px;
+      line-height: 1.05;
+      margin: 0 0 18px;
+      color: var(--brown);
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin: 0 0 28px;
+      max-width: 620px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .section {
+      padding: 76px 0;
+    }
+
+    .section-light {
+      background: var(--white);
+    }
+
+    .section-tan {
+      background: var(--tan);
+    }
+
+    .section-title {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto 48px;
+    }
+
+    .section-title h2 {
+      font-size: 38px;
+      margin: 0 0 12px;
+      color: var(--brown);
+    }
+
+    .section-title p {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .services-heading-card {
+      background: linear-gradient(135deg, var(--brown), #4b2d1b);
+      color: var(--white);
+      border-radius: 24px;
+      padding: 34px 30px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .services-heading-card h2 {
+      margin: 0 0 10px;
+      font-size: 36px;
+      color: var(--white);
+    }
+
+    .services-heading-card p {
+      margin: 0 auto;
+      max-width: 760px;
+      color: rgba(255,255,255,0.92);
+      font-size: 17px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      background: rgba(202, 162, 74, 0.15);
+      color: var(--gold-dark);
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      margin-bottom: 18px;
+    }
+
+    .service-card h3 {
+      margin: 0 0 10px;
+      font-size: 25px;
+      color: var(--brown);
+    }
+
+    .service-card p {
+      margin: 0 0 16px;
+      font-size: 16px;
+    }
+
+    .service-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .service-card li {
+      margin-bottom: 8px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .contact-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .contact-card h4 {
+      margin: 0 0 8px;
+      color: var(--brown);
+      font-size: 20px;
+    }
+
+    .contact-card p {
+      margin: 0;
+    }
+
+    .contact-email {
+      white-space: nowrap;
+    }
+
+    .cta {
+      background: var(--brown);
+      color: var(--white);
+      border-radius: 24px;
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .cta h2 {
+      margin: 0 0 12px;
+      font-size: 38px;
+    }
+
+    .cta p {
+      max-width: 760px;
+      margin: 0 auto 24px;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 22px;
+      margin-top: 28px;
+      margin-bottom: 32px;
+    }
+
+    .trust-card {
+      background: var(--white);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 28px 18px 22px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 155px;
+    }
+
+    .trust-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+
+    .trust-title {
+      font-weight: 700;
+      font-size: 1.13rem;
+      color: var(--brown);
+      margin-bottom: 6px;
+    }
+
+    .trust-desc {
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .yelp-stars {
+      color: var(--yelp-red);
+      font-size: 1.15em;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .testimonial-row {
+      display: flex;
+      justify-content: center;
+    }
+
+    .testimonial-card {
+      background: var(--white);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 36px 32px 28px;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .testimonial-title {
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--brown);
+      margin-bottom: 22px;
+    }
+
+    .testimonial-review {
+      margin-bottom: 18px;
+    }
+
+    .testimonial-stars {
+      color: var(--yelp-red);
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .testimonial-text {
+      font-size: 1.05rem;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .testimonial-button {
+      display: inline-block;
+      background: var(--yelp-red);
+      color: var(--white);
+      font-weight: 700;
+      border-radius: 8px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      margin-top: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .testimonial-button:hover {
+      background: #a81c1c;
+    }
+
+    footer {
+      background: #2a180f;
+      color: rgba(255,255,255,0.85);
+      padding: 24px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .services-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contact-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .trust-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .navbar .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .hero {
+        min-height: 580px;
+        background-position: 65% top;
+        padding: 16px 0 16px;
+      }
+
+      .hero-content {
+        max-width: 100%;
+        margin-left: 0;
+        margin-top: 24px;
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .nav-links {
+        display: flex;
+        width: 100%;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar {
+        font-size: 12px;
+      }
+
+      .topbar .container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 6px 0;
+      }
+
+      .navbar .container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 64px;
+        padding: 6px 0;
+      }
+
+      .logo img {
+        height: 48px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: block;
+      }
+
+      .nav-links {
+        gap: 12px;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+      }
+
+      .nav-links .btn {
+        width: auto;
+        padding: 10px 16px;
+      }
+
+      .hero {
+        min-height: 490px;
+        background-position: 74% -56px;
+        padding: 8px 0 10px;
+      }
+
+      .hero-content {
+        max-width: 92%;
+        padding: 16px 18px 18px;
+        border-radius: 18px;
+        margin-top: 54px;
+      }
+
+      .eyebrow {
+        margin-bottom: 14px;
+        padding: 7px 12px;
+        font-size: 12px;
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 14px;
+      }
+
+      .hero p {
+        font-size: 15px;
+        margin-bottom: 20px;
+      }
+
+      .section {
+        padding: 58px 0;
+      }
+
+      .section-title h2,
+      .services-heading-card h2,
+      .cta h2 {
+        font-size: 30px;
+      }
+
+      .services-grid,
+      .contact-grid,
+      .trust-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .services-heading-card,
+      .testimonial-card {
+        padding: 24px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .hero-actions .btn,
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div>Notary • Apostilles • Live Scan • Mobile Service</div>
+      <div>Call Now: 408 890-6851</div>
+    </div>
+  </div>
+
+  <header class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo" aria-label="Absolute Notary home">
+        <img src="forheaderAN.png" alt="Absolute Notary" />
+      </a>
+      <details class="mobile-menu">
+        <summary>Menu</summary>
+        <div class="mobile-menu-panel">
+          <a href="index.html" class="mobile-menu-link">Home</a>
+          <a href="booking.html" class="mobile-menu-link">Schedule an appointment</a>
+          <a href="order.html" class="btn btn-primary">Order now</a>
+        </div>
+      </details>
+      <nav class="nav-links">
+        
+        <a href="index.html">Home</a>
+        <a href="booking.html">Schedule an appointment</a>
+        <a href="order.html" class="btn btn-primary">Order now</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="eyebrow">Trusted • Professional • Convenient</div>
+        <h1>Reliable Notary Services When You Need Them Most</h1>
+        <p>
+          Absolute Notary provides professional mobile notary, loan signing, and
+          document support services with a smooth, dependable experience for individuals,
+          families, and businesses.
+        </p>
+        <div class="hero-actions">
+          <a href="booking.html" class="btn btn-primary">Schedule an Appointment</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light">
+    <div class="container">
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">📍</div>
+          <h3>Mobile Notary</h3>
+          <p>General notarization at your home, office, hospital, or other location.</p>
+          <ul>
+            <li>Convenient travel to your location</li>
+            <li>Flexible appointment scheduling</li>
+            <li>Professional mobile support</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📄</div>
+          <h3>Apostille Services</h3>
+          <p>Support for California apostille processing with standard and rush options.</p>
+          <ul>
+            <li>Rush processing available</li>
+            <li>Guidance through the process</li>
+            <li>Document support from start to finish</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🚔</div>
+          <h3>Bail Bond Notary</h3>
+          <p>Fast, responsive notary support for urgent bail bond document needs.</p>
+          <ul>
+            <li>Time-sensitive service</li>
+            <li>Agency-friendly support</li>
+            <li>Mobile appointments available</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🏠</div>
+          <h3>Loan Signing</h3>
+          <p>Reliable assistance for real estate and loan signing appointments.</p>
+          <ul>
+            <li>Professional signing support</li>
+            <li>Time-sensitive appointments</li>
+            <li>Organized document handling</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🖐️</div>
+          <h3>Live Scan</h3>
+          <p>Fingerprinting services for employment, licensing, and background checks.</p>
+          <ul>
+            <li>DOJ / FBI processing</li>
+            <li>Licensing and job requirements</li>
+            <li>Fast appointments available</li>
+          </ul>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🏥</div>
+          <h3>Senior Facilities</h3>
+          <p>Convenient on-site visits for nursing homes, assisted living, and care facilities.</p>
+          <ul>
+            <li>Facility visits available</li>
+            <li>Respectful, patient service</li>
+            <li>Helpful for families and caregivers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tan">
+    <div class="container">
+      <div class="section-title">
+        <h2>Why Clients Choose Absolute Notary</h2>
+        <p>Built around convenience, professionalism, and dependable service when timing matters.</p>
+      </div>
+
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-icon">⏰</div>
+          <div class="trust-title">24 Hour Availability</div>
+          <div class="trust-desc">Urgent notary support for time-sensitive situations</div>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-icon">🚗</div>
+          <div class="trust-title">Mobile Service</div>
+          <div class="trust-desc">We come to you</div>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-icon">🤝</div>
+          <div class="trust-title">Professional Care</div>
+          <div class="trust-desc">Trusted support</div>
+        </div>
+
+        <div class="trust-card">
+          <div class="trust-icon"><span class="yelp-stars">★★★★★</span></div>
+          <div class="trust-title">Yelp Reviews</div>
+          <div class="trust-desc"><span class="yelp-stars">★★★★★</span> 5-Star Rating</div>
+        </div>
+      </div>
+
+      <div class="testimonial-row">
+        <div class="testimonial-card">
+          <div class="testimonial-title">Real Client Experiences</div>
+
+          <div class="testimonial-review">
+            <div class="testimonial-stars">★★★★★ Elwyn C. — San Jose, CA</div>
+            <p class="testimonial-text">“Don is outstanding! He's professional, reliable, and very knowledgeable...”</p>
+          </div>
+
+          <div class="testimonial-review">
+            <div class="testimonial-stars">★★★★★ Melissa L. — Central San Jose, San Jose, CA</div>
+            <p class="testimonial-text">“I have only good things to say about Don's notary service...”</p>
+          </div>
+
+          <a
+            class="testimonial-button"
+            href="https://www.yelp.com/biz/absolute-notary-and-loan-signing-san-jose?osq=Absolute+Notary+%26+Loan+Signing&dd_referrer=https%3A%2F%2Fwww.yelp.com%2F"
+            target="_blank"
+            rel="noopener"
+          >
+            View More on Yelp
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-light" id="contact">
+    <div class="container">
+      <div class="section-title">
+        <h2>Contact Absolute Notary</h2>
+        <p>Need help choosing the right service? Reach out and we will guide you.</p>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-card">
+          <h4>Phone</h4>
+          <p>(408) 890-6851</p>
+        </div>
+
+        <div class="contact-card">
+          <h4>Email</h4>
+          <p class="contact-email">info@absolute-notary.com</p>
+        </div>
+
+        <div class="contact-card">
+          <h4>Address</h4>
+          <p>90 S White Rd.<br />San Jose, CA 95127</p>
+        </div>
+
+        <div class="contact-card">
+          <h4>Website</h4>
+          <p>www.absolute-notary.com</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-tan">
+    <div class="container">
+      <div class="cta">
+        <h2>Ready to Get Started?</h2>
+        <p>
+          Whether you need standard notarization, apostille support, bail bond
+          notary service, Live Scan fingerprinting, loan signing, or a visit to
+          a senior facility, Absolute Notary is ready to help.
+        </p>
+        <a href="order.html" class="btn btn-primary">Order Now</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      © 2026 Absolute Notary. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
