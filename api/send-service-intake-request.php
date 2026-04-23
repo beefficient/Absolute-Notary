@@ -12,9 +12,27 @@ function clean_input(string $value): string
     return trim(strip_tags($value));
 }
 
+function app_base_path(): string
+{
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+    $apiPosition = strpos($scriptName, '/api/');
+
+    if ($apiPosition !== false) {
+        return substr($scriptName, 0, $apiPosition);
+    }
+
+    return rtrim(dirname($scriptName), '/.');
+}
+
+function order_page_url(string $query = ''): string
+{
+    $basePath = app_base_path();
+    return ($basePath !== '' ? $basePath : '') . '/order.html' . $query;
+}
+
 function redirect_with_status(string $status): void
 {
-    header('Location: /order.html?service_intake_status=' . rawurlencode($status));
+    header('Location: ' . order_page_url('?service_intake_status=' . rawurlencode($status)));
     exit;
 }
 

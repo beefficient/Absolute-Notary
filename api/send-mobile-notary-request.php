@@ -13,6 +13,22 @@ function clean_input(string $value): string {
 	return trim(strip_tags($value));
 }
 
+function app_base_path(): string {
+	$script_name = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+	$api_position = strpos($script_name, '/api/');
+
+	if ($api_position !== false) {
+		return substr($script_name, 0, $api_position);
+	}
+
+	return rtrim(dirname($script_name), '/.');
+}
+
+function order_page_url(string $query = ''): string {
+	$base_path = app_base_path();
+	return ($base_path !== '' ? $base_path : '') . '/order.html' . $query;
+}
+
 $name = clean_input($_POST['name'] ?? '');
 $phone = clean_input($_POST['phone'] ?? '');
 $street_address = clean_input($_POST['street_address'] ?? '');
@@ -30,7 +46,7 @@ error_log('send-mobile-notary-request.php values: ' . json_encode([
 ]));
 
 if ($name === '' || $phone === '' || $street_address === '' || $city === '' || $zip_code === '') {
-	header('Location: /order.html?status=error');
+	header('Location: ' . order_page_url('?status=error'));
 	exit;
 }
 
@@ -78,13 +94,13 @@ foreach ($autoload_paths as $autoload_path) {
 
 if (!$autoload_loaded || !class_exists(PHPMailer::class)) {
 	error_log('send-mobile-notary-request.php PHPMailer is not available via Composer autoload');
-	header('Location: /order.html?status=error');
+	header('Location: ' . order_page_url('?status=error'));
 	exit;
 }
 
 if ($smtp_password === '' || $smtp_password === 'PASTE_REAL_EMAIL_PASSWORD_HERE') {
 	error_log('send-mobile-notary-request.php SMTP password is not configured');
-	header('Location: /order.html?status=error');
+	header('Location: ' . order_page_url('?status=error'));
 	exit;
 }
 
@@ -113,9 +129,9 @@ try {
 }
 
 if ($success) {
-	header('Location: /order.html?status=success');
+	header('Location: ' . order_page_url('?status=success'));
 	exit;
 }
 
-header('Location: /order.html?status=error');
+header('Location: ' . order_page_url('?status=error'));
 exit;

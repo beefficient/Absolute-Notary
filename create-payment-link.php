@@ -7,12 +7,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     render_error_page('We were unable to start Square checkout. Please call (408) 890-6850 or try again.');
 }
 
-// Paste your Square credentials here. Keep secrets in PHP only and never move them into JavaScript.
-$squareAccessToken = 'YOUR_SQUARE_ACCESS_TOKEN';
-$squareLocationId = 'YOUR_SQUARE_LOCATION_ID';
+$config = [];
+$configPath = __DIR__ . '/secure/config.php';
 
-// Edit this redirect URL if you want Square to return buyers somewhere else after payment succeeds.
-$successRedirectUrl = 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/payment-success.html';
+if (file_exists($configPath)) {
+    $loadedConfig = require $configPath;
+    if (is_array($loadedConfig)) {
+        $config = $loadedConfig;
+    }
+}
 
 function clean_text(mixed $value): string
 {
@@ -47,6 +50,21 @@ function cents_to_display(int $amountCents): string
     return '$' . number_format($amountCents / 100, 2, '.', '');
 }
 
+function app_base_path(): string
+{
+    $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+    return rtrim(dirname($scriptName), '/.');
+}
+
+function app_url(string $path): string
+{
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $basePath = app_base_path();
+
+    return $scheme . '://' . $host . ($basePath !== '' ? $basePath : '') . $path;
+}
+
 function render_error_page(string $message, string $detail = ''): never
 {
     http_response_code(http_response_code() >= 400 ? http_response_code() : 500);
@@ -67,7 +85,7 @@ function render_error_page(string $message, string $detail = ''): never
     echo '</style></head><body><div class="wrap"><div class="card">';
     echo '<h1>Unable to Start Checkout</h1>';
     echo '<p>' . $safeMessage . '</p>';
-    echo '<p><a href="/order.html">Return to the order page</a></p>';
+    echo '<p><a href="' . htmlspecialchars(app_url('/order.html'), ENT_QUOTES, 'UTF-8') . '">Return to the order page</a></p>';
 
     if ($safeDetail !== '') {
         echo '<div class="detail">' . $safeDetail . '</div>';
@@ -76,6 +94,13 @@ function render_error_page(string $message, string $detail = ''): never
     echo '</div></div></body></html>';
     exit;
 }
+
+// Keep Square secrets server-side and load them from config or environment.
+$squareAccessToken = getenv('ABSOLUTE_NOTARY_SQUARE_ACCESS_TOKEN') ?: ($config['square_access_token'] ?? 'YOUR_SQUARE_ACCESS_TOKEN');
+$squareLocationId = getenv('ABSOLUTE_NOTARY_SQUARE_LOCATION_ID') ?: ($config['square_location_id'] ?? 'YOUR_SQUARE_LOCATION_ID');
+
+// Default the success redirect back to the order page unless configured otherwise.
+$successRedirectUrl = $config['square_success_redirect_url'] ?? app_url('/order.html');
 
 function build_notary_line_item(array $item): ?array
 {
@@ -140,7 +165,7 @@ if ($squareAccessToken === 'YOUR_SQUARE_ACCESS_TOKEN' || $squareLocationId === '
     http_response_code(500);
     render_error_page(
         'We were unable to start Square checkout. Please call (408) 890-6850 or try again.',
-        'Square credentials are not configured yet in create-payment-link.php.'
+        'Square credentials are not configured in the server environment or secure/config.php.'
     );
 }
 
