@@ -8,6 +8,6 @@ return [
     'smtp_host' => 'smtp.ionos.com',
     'smtp_port' => 587,
     'smtp_encryption' => 'tls',
-    'smtp_username' => 'info@absolute-notary.com',
-    'smtp_password' => 'bigd@ddyf0xh0use2026!EMAIL',
+    'smtp_username' => '',
+    'smtp_password' => '',
 ];
